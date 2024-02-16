@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera App</title>
+</head>
+<body>
+    <video id="camera" width="640" height="480" autoplay></video>
+    <button id="captureBtn">Capture</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+
+    <script>
+        const video = document.getElementById('camera');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+
+        // Get user media
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => console.error('Error accessing camera:', err));
+            // Capture image from video stream
+        captureBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // You can now use the captured image data as needed
+            const imageDataURL = canvas.toDataURL('image/png');
+            alert('Image captured!');
+            console.log(imageDataURL);
+        });
+    </script>
+    <input type='file' capture='camera' accept="image/*"/>
+</body>
+</html>
